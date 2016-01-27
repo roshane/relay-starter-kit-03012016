@@ -1,11 +1,11 @@
 import graphql,{
     GraphQLObjectType,
     GraphQLString,
+    GraphQLInt,
     GraphQLSchema,
     GraphQLList,
     GraphQLNonNull
 } from 'graphql';
-
 import {
     customer,
     feedback,
@@ -84,13 +84,13 @@ const AssetType = new GraphQLObjectType({
             customers: {
                 args: {
                     id: {
-                        type: GraphQLString
+                        type: GraphQLInt
                     },
                     offset: {
-                        type: GraphQLString
+                        type: GraphQLInt
                     },
                     limit: {
-                        type: GraphQLString
+                        type: GraphQLInt
                     }
                 },
                 type: new GraphQLList(CustomerType),
