@@ -1,33 +1,48 @@
-/**
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
- *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
- */
+import Sequelize from 'sequelize';
+import Lodash from 'lodash';
+import Faker from 'faker';
 
-// Model types
-class User extends Object {}
-class Widget extends Object {}
+var connection = new Sequelize('relay', 'user', 'password', {
+    host: 'localhost',
+    dialect: 'mysql',
 
-// Mock data
-var viewer = new User();
-viewer.id = '1';
-viewer.name = 'Anonymous';
-var widgets = ['What\'s-it', 'Who\'s-it', 'How\'s-it'].map((name, i) => {
-  var widget = new Widget();
-  widget.name = name;
-  widget.id = `${i}`;
-  return widget;
+    pool: {
+        max: 5,
+        min: 0,
+        idle: 10000
+    }
 });
 
+const Customer = connection.define('customer', {
+    firstName: {
+        type: Sequelize.STRING,
+        field: 'first_name'
+    },
+    lastName: {
+        type: Sequelize.STRING,
+        field: 'last_name'
+    },
+    age: {
+        type: Sequelize.INTEGER
+    },
+    phoneNumber: {
+        type: Sequelize.STRING,
+        field: 'phone_number'
+    }
+});
+
+//connection.sync({force: true}).then(()=> {
+//    Lodash.times(10, ()=> {
+//        Customer.create({
+//            firstName: Faker.name.firstName(),
+//            lastName: Faker.name.lastName(),
+//            age: Faker.random.number() % 80,
+//            phoneNumber: Faker.phone.phoneNumber()
+//        })
+//    })
+//});
+
 module.exports = {
-  // Export methods that your schema can use to interact with your database
-  getUser: (id) => id === viewer.id ? viewer : null,
-  getViewer: () => viewer,
-  getWidget: (id) => widgets.find(w => w.id === id),
-  getWidgets: () => widgets,
-  User,
-  Widget,
+    customer: Customer,
+    connection: connection
 };
