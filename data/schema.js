@@ -1,7 +1,6 @@
 import graphql,{
     GraphQLObjectType,
     GraphQLString,
-    GraphQLInt,
     GraphQLSchema,
     GraphQLList,
     GraphQLNonNull
@@ -13,13 +12,19 @@ import {
     connection
 } from './database';
 
+class Asset {
+    constructor(props) {
+        this.props = props;
+    }
+}
+
 const CustomerType = new GraphQLObjectType({
     name: "Customer",
     description: "Customer",
     fields: ()=> {
         return {
             id: {
-                type: GraphQLInt,
+                type: GraphQLString,
                 resolve: (customer)=>customer.id
             },
             firstName: {
@@ -31,7 +36,7 @@ const CustomerType = new GraphQLObjectType({
                 resolve: (customer)=>customer.lastName
             },
             age: {
-                type: GraphQLInt,
+                type: GraphQLString,
                 resolve: (customer)=>customer.age
             },
             phoneNumber: {
@@ -52,11 +57,11 @@ const FeedbackType = new GraphQLObjectType({
     fields: ()=> {
         return {
             id: {
-                type: GraphQLInt,
+                type: GraphQLString,
                 resolve: (feedback)=>feedback.id
             },
             rating: {
-                type: GraphQLInt,
+                type: GraphQLString,
                 resolve: (feedback)=>feedback.rating
             },
             comment: {
@@ -71,22 +76,21 @@ const FeedbackType = new GraphQLObjectType({
     }
 });
 
-
-const Query = new GraphQLObjectType({
-    name: "RootQuery",
-    description: "RootQuery",
+const AssetType = new GraphQLObjectType({
+    name: "Asset",
+    description: "Asset",
     fields: ()=> {
         return {
             customers: {
                 args: {
                     id: {
-                        type: GraphQLInt
+                        type: GraphQLString
                     },
                     offset: {
-                        type: GraphQLInt
+                        type: GraphQLString
                     },
                     limit: {
-                        type: GraphQLInt
+                        type: GraphQLString
                     }
                 },
                 type: new GraphQLList(CustomerType),
@@ -133,6 +137,20 @@ const Query = new GraphQLObjectType({
     }
 });
 
+
+const Query = new GraphQLObjectType({
+    name: "RootQuery",
+    description: "RootQuery",
+    fields: ()=> {
+        return {
+            asset: {
+                type: AssetType,
+                resolve: ()=>new Asset()
+            }
+        }
+    }
+});
+
 const Mutation = new GraphQLObjectType({
     name: "Mutation",
     description: "Mutation",
@@ -150,7 +168,7 @@ const Mutation = new GraphQLObjectType({
                         resolve: (customer)=>customer.lastName
                     },
                     age: {
-                        type: new GraphQLNonNull(GraphQLInt),
+                        type: new GraphQLNonNull(GraphQLString),
                         resolve: (customer)=>customer.age
                     },
                     phoneNumber: {

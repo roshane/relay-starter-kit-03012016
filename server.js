@@ -41,14 +41,15 @@ var compiler = webpack({
     },
     output: {filename: 'app.js', path: '/'}
 });
-//var app = new WebpackDevServer(compiler, {
-//  contentBase: '/public/',
-//  proxy: {'/graphql': `http://localhost:${GRAPHQL_PORT}`},
-//  publicPath: '/js/',
-//  stats: {colors: true}
-//});
-//// Serve static resources
-//app.use('/', express.static(path.resolve(__dirname, 'public')));
-//app.listen(APP_PORT, () => {
-//  console.log(`App is now running on http://localhost:${APP_PORT}`);
-//});
+var app = new WebpackDevServer(compiler, {
+    contentBase: '/public/',
+    proxy: {'/graphql': `http://localhost:${GRAPHQL_PORT}`},
+    publicPath: '/js/',
+    noInfo: true,
+    stats: {colors: true}
+});
+// Serve static resources
+app.use('/', express.static(path.resolve(__dirname, 'public')));
+app.listen(APP_PORT, () => {
+    console.log(`App is now running on http://localhost:${APP_PORT}`);
+});
