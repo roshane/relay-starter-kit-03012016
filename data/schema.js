@@ -50,8 +50,9 @@ const RootQuery = new GraphQLObjectType({
                 },
                 type: new GraphQLList(CustomerType),
                 resolve: (root, args)=> {
-                    let {id}=args
-                    var result = customer.findAll({where: {id: id}});
+                    let {id}=args;
+                    let query = (id) ? {id: id}:{};
+                    var result = customer.findAll({where: query});
                     //result.then((result)=> {
                     //    console.log(JSON.stringify(result))
                     //});
@@ -64,7 +65,6 @@ const RootQuery = new GraphQLObjectType({
 
 const schema = new GraphQLSchema({
     query: RootQuery,
-    mutation:Mutation
 });
 
 module.exports = {
