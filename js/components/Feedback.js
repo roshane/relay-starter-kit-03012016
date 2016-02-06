@@ -1,30 +1,41 @@
 import React from 'react';
 import Relay from 'react-relay';
+import Rating from './Rating';
 
 export default class Feedback extends React.Component {
     constructor(props) {
         super(props)
     }
 
+    renderRating(count){
+        var rows=[];
+        for(var i=0;i<=count;i++){
+            rows.push(<Rating/>);
+        }
+        return rows;
+    }
+
     render() {
-        var {feedback} = this.props;
-        console.log(feedback);
-        return <div>
-            <li>
-                <p>Id : {feedback.id}</p>
-                <p>Rating : {feedback.rating}</p>
-                <p>Comment : {feedback.comment}</p>
-            </li>
-        </div>
+        var {feedbacks} = this.props;
+        return <table className="table table-condensed table-hover table-responsive">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Id</th>
+                <th>Comment</th>
+                <th>Rating</th>
+            </tr>
+            </thead>
+            <tbody>
+            {feedbacks && feedbacks.map((fb, i)=> {
+                return <tr key={i}>
+                    <td className="col-md-1">{i}</td>
+                    <td className="col-md-1">{fb.id}</td>
+                    <td className="col-md-8">{fb.comment}</td>
+                    <td className="col-md-2">{this.renderRating(fb.rating)}</td>
+                </tr>
+            })}
+            </tbody>
+        </table>
     }
 }
-
-//export default Relay.createContainer(Feedback,{
-//    fragments:{
-//        feedback:()=>Relay.QL`fragment on Feedback{
-//            id
-//            rating
-//            comment
-//        }`
-//    }
-//});

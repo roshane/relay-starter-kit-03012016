@@ -1,53 +1,46 @@
 import React from 'react';
 import Relay from 'react-relay';
-import FeedBack from './Feedback';
+import Customers from './Customers';
 
 class App extends React.Component {
-
-    static defaultProps = {
-        count: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    };
 
     constructor(props) {
         super(props)
     }
 
-    _handleCustomerLimitChange(e){
+    componentWillMount() {
+        //do something before mount
+    }
+
+    _handleCustomerLimitChange(e) {
         this.props.relay.setVariables({
-            customerLimit:parseInt(e.target.value)
+            customerLimit: parseInt(e.target.value)
         })
     }
 
     render() {
-        console.log(this.props);
+        let selectedCustomerLimit = this.props.relay.variables.customerLimit;
+
         return (
             <div>
-                <div>
-                    limit : <select ref="customerLimit"
-                                    onChange={this._handleCustomerLimitChange.bind(this)}>
-                    {this.props.count.map((i)=>{
-                        return <option key={i} value={i}>{i} customers</option>
-                    })}
-                </select>
+                <h1 className="text-center text-muted">
+                    <i className="glyphicon glyphicon-user text-muted"/>&nbsp;
+                    Customer list
+                </h1>
+                <div className="form-group-sm ">
+                    <select ref="customerLimit"
+                            className="form-control"
+                            onChange={this._handleCustomerLimitChange.bind(this)}
+                            defaultValue={selectedCustomerLimit}>
+                        {this.props.count.map((i)=> {
+                            return <option key={i} value={i}>{i} customers</option>
+                        })}
+                    </select>
                 </div>
                 <hr/>
-                <h1>Customer list</h1>
-                <ul>
-                    {this.props.asset.customers.map((customer, i)=> {
-                        return <li key={i}>
-                            <p>Customer Id : {customer.id}</p>
-                            <p>First Name :{customer.firstName}</p>
-                            <p>Last Name : {customer.lastName}</p>
-                            <p>Age : {customer.age}</p>
-                            <ul>
-                                {customer.feedbacks.map((feedback, i)=> {
-                                    return <FeedBack key={i} feedback={feedback}/>
-                                })}
-                            </ul>
-                            <hr/>
-                        </li>
+                    {this.props.asset.customers.map((customer,i)=>{
+                        return <Customers customer={customer} key={i}/>;
                     })}
-                </ul>
             </div>
         );
     }
@@ -60,15 +53,7 @@ export default Relay.createContainer(App, {
     fragments:{
         asset:()=>Relay.QL`fragment on Asset{
             customers(limit:$customerLimit){
-                id
-                firstName
-                lastName
-                age
-                feedbacks{
-                    id
-                    rating
-                    comment
-                }
+                ${Customers.getFragment('customer')}
             }
         }`
     }
