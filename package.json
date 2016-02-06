@@ -7,7 +7,7 @@
   "scripts": {
     "start": "babel-node ./server.js",
     "update-schema": "babel-node ./scripts/updateSchema.js",
-    "initialize": "babel-node ./data/database.js"
+    "init": "babel-node ./data/initDB.js"
   },
   "dependencies": {
     "babel": "5.8.21",

@@ -1,6 +1,4 @@
 import Sequelize from 'sequelize';
-import Lodash from 'lodash';
-import Faker from 'faker';
 
 var connection = new Sequelize('relay', 'user', 'password', {
     host: 'localhost',
@@ -42,24 +40,6 @@ const Feedback = connection.define('feedback', {
 
 Customer.hasMany(Feedback);
 Feedback.belongsTo(Customer);
-
-//connection.sync({force: true}).then(()=> {
-//    Lodash.times(10, ()=> {
-//        Customer.create({
-//            firstName: Faker.name.firstName(),
-//            lastName: Faker.name.lastName(),
-//            age: Faker.random.number() % 80,
-//            phoneNumber: Faker.phone.phoneNumber()
-//        }).then((customer)=> {
-//            Feedback.create({
-//                comment: Faker.lorem.sentence(),
-//                rating: Faker.random.number() % 5
-//            }).then((feedback)=> {
-//                customer.setFeedbacks([feedback]);
-//            })
-//        })
-//    })
-//});
 
 module.exports = {
     customer: Customer,
