@@ -4,6 +4,10 @@ import Customers from './Customers';
 
 class App extends React.Component {
 
+    static defaultProps = {
+        count: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    };
+
     constructor(props) {
         super(props)
     }
