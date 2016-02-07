@@ -1,15 +1,19 @@
 import 'babel-polyfill';
 
-import App from './components/App';
-import AppHomeRoute from './routes/AppHomeRoute';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Relay from 'react-relay';
+import { useRouterHistory } from 'react-router';
+import { RelayRouter } from 'react-router-relay';
+import Routes from './routes/AppHomeRoute';
+import {createHashHistory} from 'history';
+
+
+var mountNode = document.getElementById('root');
+
+const history = useRouterHistory(createHashHistory)({ queryKey: false });
 
 ReactDOM.render(
-  <Relay.RootContainer
-    Component={App}
-    route={new AppHomeRoute()}
-  />,
-  document.getElementById('root')
+    <RelayRouter routes={Routes} history={history}/>,
+    mountNode
 );

@@ -1,6 +1,7 @@
 import React from 'react';
 import Relay from 'react-relay';
 import Customers from './Customers';
+import Header from './Header';
 
 class App extends React.Component {
 
@@ -23,10 +24,12 @@ class App extends React.Component {
     }
 
     render() {
+        let {children}=this.props;
         let selectedCustomerLimit = this.props.relay.variables.customerLimit;
-
         return (
             <div>
+<Header/>
+                {children ? children : <div>
                 <h1 className="text-center text-muted">
                     <i className="glyphicon glyphicon-user text-muted"/>&nbsp;
                     Customer list
@@ -45,6 +48,7 @@ class App extends React.Component {
                     {this.props.asset.customers.map((customer,i)=>{
                         return <Customers customer={customer} key={i}/>;
                     })}
+                </div>}
             </div>
         );
     }

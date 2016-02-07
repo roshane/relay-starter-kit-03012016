@@ -1,14 +1,19 @@
 import Relay from 'react-relay';
+import { IndexRoute, Route } from 'react-router';
+import React from 'react';
+import App from './../components/App';
+import AddFeedback from './../components/AddFeedBack';
 
-export default class extends Relay.Route {
-    static queries = {
-        asset: (Component) => Relay.QL`
-            query {
-                asset{
-                    ${Component.getFragment('asset')}
-                }
-            }
-        `,
-    };
-    static routeName = 'AppHomeRoute';
-}
+
+const Query = {
+    asset: ()=>Relay.QL`query {asset}`
+};
+
+export default(
+    <Route component={App} queries={Query} path="/">
+        <Route component={AddFeedback}
+               queries={Query}
+               path="/add"/>
+    </Route>
+);
+

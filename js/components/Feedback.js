@@ -10,7 +10,7 @@ export default class Feedback extends React.Component {
     renderRating(count){
         var rows=[];
         for(var i=0;i<=count;i++){
-            rows.push(<Rating/>);
+            rows.push(<Rating key={i}/>);
         }
         return rows;
     }
