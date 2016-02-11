@@ -8,7 +8,8 @@ import graphql,{
 
 import {
     customer,
-    connection
+    connection,
+    feedback
 } from './database';
 
 const CustomerType = new GraphQLObjectType({
@@ -31,6 +32,31 @@ const CustomerType = new GraphQLObjectType({
             phoneNumber: {
                 type: GraphQLString,
                 resolve: (customer)=>customer.phoneNumber
+            },
+            feedback:{
+                type:new GraphQLList(FeedbackType),
+                resolve:(customer)=>customer.Feedbacks
+            }
+        }
+    }
+});
+
+const FeedbackType = new GraphQLObjectType({
+    name: "Feedback",
+    description: "Feedback entity",
+    fields: ()=> {
+        return {
+            id: {
+                type: GraphQLString,
+                resolve: (feedback)=>feedback.id
+            },
+            comment: {
+                type: GraphQLString,
+                resolve: (feedback)=>feedback.comment
+            },
+            rating: {
+                type: GraphQLString,
+                resolve: (feedback)=>feedback.rating
             }
         }
     }
@@ -42,6 +68,10 @@ const RootQuery = new GraphQLObjectType({
     description: "root query",
     fields: ()=> {
         return {
+            feedbacks: {
+                type: new GraphQLList(FeedbackType),
+                resolve: ()=>feedback.findAll()
+            },
             customers: {
                 args: {
                     id: {
@@ -52,7 +82,10 @@ const RootQuery = new GraphQLObjectType({
                 resolve: (root, args)=> {
                     let {id}=args;
                     let query = (id) ? {id: id}:{};
-                    var result = customer.findAll({where: query});
+                    var result = customer
+                        .findAll({where: query,include:[{
+                            model:feedback
+                        }]});
                     //result.then((result)=> {
                     //    console.log(JSON.stringify(result))
                     //});

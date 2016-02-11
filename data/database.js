@@ -31,6 +31,19 @@ const Customer = connection.define('Customer', {
 });
 
 
+const Feedback = connection.define('Feedback', {
+    comment: {
+        type: Sequelize.STRING
+    },
+    rating: {
+        type: Sequelize.INTEGER
+    }
+});
+
+
+Customer.hasMany(Feedback);
+Feedback.belongsTo(Customer);
+
 //connection.sync({force: true}).then(function () {
 //    Lodash.times(10, ()=> {
 //        Customer.create({
@@ -38,11 +51,19 @@ const Customer = connection.define('Customer', {
 //            lastName: Faker.name.lastName(),
 //            phoneNumber: Faker.phone.phoneNumber(),
 //            age: Faker.random.number() % 100
-//        });
+//        }).then((customer)=>{
+//            Feedback.create({
+//                comment:Faker.lorem.sentence(),
+//                rating:Faker.random.number() % 5
+//            }).then((feedback)=>{
+//                customer.addFeedback(feedback)
+//            })
+//        })
 //    });
 //});
 
 module.exports = {
     connection: connection,
-    customer: Customer
+    customer: Customer,
+    feedback:Feedback
 };
